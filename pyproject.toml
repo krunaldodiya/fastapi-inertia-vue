@@ -1,6 +1,6 @@
 [tool.poetry]
 package-mode = false
-name = "deepai-studio-fastapi"
+name = "fastapi-inertia-vue"
 
 [tool.poetry.dependencies]
 python = ">=3.11, <3.12"

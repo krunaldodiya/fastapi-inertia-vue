@@ -1,7 +1,7 @@
 MAKEFLAGS+="-j 2"
 
 init:
-	pip install -r requirements.txt
+	poetry install --no-root
 	@npm --prefix "frontend" install
 
 dev-python:
