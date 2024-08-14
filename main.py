@@ -1,22 +1,22 @@
 import os
 
-from typing import Annotated
-from pydantic import BaseModel, EmailStr
-from fastapi import FastAPI, Depends
-from fastapi.responses import RedirectResponse
+from fastapi import FastAPI
+
 from fastapi.exceptions import RequestValidationError
+
 from starlette.staticfiles import StaticFiles
+
 from starlette.middleware.sessions import SessionMiddleware
+
+from inertia_dependency import inertia_config
+
 from inertia import (
-    InertiaResponse,
-    Inertia,
-    inertia_dependency_factory,
     inertia_version_conflict_exception_handler,
     inertia_request_validation_exception_handler,
     InertiaVersionConflictException,
-    InertiaConfig,
-    lazy,
 )
+
+from app.routes import home
 
 app = FastAPI()
 
@@ -26,6 +26,7 @@ app.add_exception_handler(
     InertiaVersionConflictException,
     inertia_version_conflict_exception_handler,  # type: ignore[arg-type]
 )
+
 app.add_exception_handler(
     RequestValidationError,
     inertia_request_validation_exception_handler,  # type: ignore[arg-type]
@@ -34,17 +35,6 @@ app.add_exception_handler(
 manifest_json = os.path.join(
     os.path.dirname(__file__), "webapp", "dist", "client", "manifest.json"
 )
-
-inertia_config = InertiaConfig(
-    manifest_json_path=manifest_json,
-    environment="production",
-    use_flash_messages=True,
-    use_flash_errors=True,
-    use_typescript=True,
-    ssr_enabled=True,
-)
-
-InertiaDep = Annotated[Inertia, Depends(inertia_dependency_factory(inertia_config))]
 
 vue_dir = (
     os.path.join(os.path.dirname(__file__), "webapp", "dist", "client")
@@ -58,38 +48,4 @@ app.mount(
     "/assets", StaticFiles(directory=os.path.join(vue_dir, "assets")), name="assets"
 )
 
-
-def some_dependency(inertia: InertiaDep) -> None:
-    inertia.share(message="hello from dependency")
-
-
-@app.get("/", response_model=None)
-async def index(inertia: InertiaDep) -> InertiaResponse:
-    props = {
-        "message": "hello from index",
-        "lazy_prop": lazy(lambda: "hello from lazy prop"),
-    }
-    return await inertia.render("IndexPage", props)
-
-
-@app.get("/2", response_model=None)
-async def other_page(inertia: InertiaDep) -> RedirectResponse:
-    inertia.flash("hello from index2 (through flash)", category="message")
-    return RedirectResponse(url="/3")
-
-
-@app.get("/3", response_model=None, dependencies=[Depends(some_dependency)])
-async def other_page_with_flashed_data(inertia: InertiaDep) -> InertiaResponse:
-    inertia.flash("hello from index3 (through flash)", category="message")
-    return await inertia.render("OtherPage")
-
-
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
-
-
-@app.post("/login", response_model=None)
-async def some_form(user: UserLogin, inertia: InertiaDep) -> RedirectResponse:
-    inertia.flash("form submitted", category="message")
-    return inertia.back()
+app.include_router(home.router)
