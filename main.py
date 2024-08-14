@@ -32,13 +32,9 @@ app.add_exception_handler(
     inertia_request_validation_exception_handler,
 )
 
-manifest_json = os.path.join(
-    os.path.dirname(__file__), "webapp", "dist", "client", "manifest.json"
-)
-
 vue_dir = (
-    os.path.join(os.path.dirname(__file__), "webapp", "dist", "client")
-    if inertia_config.environment != "development" or inertia_config.ssr_enabled is True
+    os.path.join(os.path.dirname(__file__), "webapp", "dist")
+    if inertia_config.environment != "development"
     else os.path.join(os.path.dirname(__file__), "webapp", "src")
 )
 
