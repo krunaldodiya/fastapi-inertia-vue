@@ -33,13 +33,13 @@ app.add_exception_handler(
 )
 
 manifest_json = os.path.join(
-    os.path.dirname(__file__), "webapp", "dist", "client", "manifest.json"
+    os.path.dirname(__file__), "frontend", "dist", "client", "manifest.json"
 )
 
 vue_dir = (
-    os.path.join(os.path.dirname(__file__), "webapp", "dist", "client")
+    os.path.join(os.path.dirname(__file__), "frontend", "dist", "client")
     if inertia_config.environment != "development" or inertia_config.ssr_enabled is True
-    else os.path.join(os.path.dirname(__file__), "webapp", "src")
+    else os.path.join(os.path.dirname(__file__), "frontend", "src")
 )
 
 app.mount("/src", StaticFiles(directory=vue_dir), name="src")

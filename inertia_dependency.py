@@ -7,7 +7,7 @@ from typing import Annotated
 from inertia import InertiaConfig, inertia_dependency_factory, Inertia
 
 manifest_json = os.path.join(
-    os.path.dirname(__file__), "webapp", "dist", "client", "manifest.json"
+    os.path.dirname(__file__), "frontend", "dist", "client", "manifest.json"
 )
 
 inertia_config = InertiaConfig(
