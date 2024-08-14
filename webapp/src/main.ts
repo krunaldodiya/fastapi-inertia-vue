@@ -1,6 +1,6 @@
-import './assets/main.css'
+import './index.css'
 
-import { createApp, type DefineComponent, h } from 'vue'
+import { createApp, h, type DefineComponent } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 
 createInertiaApp({
