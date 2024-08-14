@@ -14,6 +14,7 @@ This is a template repository for creating web applications using **FastAPI** (a
 - **Vite**: A next-generation frontend tooling. It’s fast, and supports hot module replacement (HMR).
 - **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
 - **TypeScript**: A strict syntactical superset of JavaScript that adds optional static typing.
+- **fastapi-inertia**: A FastAPI plugin that provides Inertia.js support for seamless integration between FastAPI and Inertia.js.
 
 ## Getting Started
 
